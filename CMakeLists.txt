@@ -13,8 +13,19 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5WebSockets REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
-add_subdirectory(deps/mbedtls EXCLUDE_FROM_ALL)
 set(ENABLE_PROGRAMS false)
+set(ENABLE_TESTING false)
+add_subdirectory(deps/mbedtls EXCLUDE_FROM_ALL)
+
+set(LWS_WITH_SHARED OFF)
+set(LWS_WITH_STATIC ON)
+set(LWS_WITH_SSL OFF)
+#set(LWS_WITH_MBEDTLS ON)
+#set(MBEDCRYPTO_LIBRARY "")
+#set(MBEDTLS_LIBRARY "")
+#set(MBEDX509_LIBRARY "")
+set(LWS_WITHOUT_TESTAPPS ON)
+add_subdirectory(deps/libwebsockets EXCLUDE_FROM_ALL)
 
 set(obs-websocket_SOURCES 
 	src/obs-websocket.cpp
@@ -34,7 +45,7 @@ set(obs-websocket_SOURCES
 	src/WSEvents.cpp
 	src/Config.cpp
 	src/Utils.cpp
-	src/forms/settings-dialog.cpp)
+	src/forms/settings-dialog.cpp src/Transport/WebsocketsServer.cpp)
 
 set(obs-websocket_HEADERS
 	src/obs-websocket.h
@@ -43,14 +54,14 @@ set(obs-websocket_HEADERS
 	src/WSEvents.h
 	src/Config.h
 	src/Utils.h
-	src/forms/settings-dialog.h)
+	src/forms/settings-dialog.h src/Transport/WebsocketsServer.h)
 
 # --- Platform-independent build settings ---
 add_library(obs-websocket MODULE 
 	${obs-websocket_SOURCES}
 	${obs-websocket_HEADERS})
 
-add_dependencies(obs-websocket mbedcrypto)
+add_dependencies(obs-websocket mbedcrypto websockets)
 
 include_directories( 
 	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api"
@@ -58,14 +69,17 @@ include_directories(
 	${Qt5WebSockets_INCLUDES}
 	${Qt5Widgets_INCLUDES}
 	${mbedcrypto_INCLUDES}
-	"${CMAKE_SOURCE_DIR}/deps/mbedtls/include")
+	"${CMAKE_SOURCE_DIR}/deps/mbedtls/include"
+	${websockets_INCLUDES}
+	"${CMAKE_SOURCE_DIR}/deps/libwebsockets/lib")
 
 target_link_libraries(obs-websocket 
 	libobs
 	Qt5::Core
 	Qt5::WebSockets
 	Qt5::Widgets
-	mbedcrypto)
+	mbedcrypto
+		websockets)
 
 # --- End of section ---
 

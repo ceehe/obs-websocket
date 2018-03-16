@@ -1,3 +1,6 @@
 [submodule "deps/mbedtls"]
 	path = deps/mbedtls
 	url = https://github.com/ARMmbed/mbedtls
+[submodule "deps/libwebsockets"]
+	path = deps/libwebsockets
+	url = https://github.com/warmcat/libwebsockets.git
