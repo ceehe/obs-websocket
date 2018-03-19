@@ -16,7 +16,7 @@ find_package(Qt5Widgets REQUIRED)
 add_subdirectory(deps/mbedtls EXCLUDE_FROM_ALL)
 set(ENABLE_PROGRAMS false)
 
-set(obs-websocket_SOURCES 
+set(obs-websocket_SOURCES
 	src/obs-websocket.cpp
 	src/WSServer.cpp
 	src/WSRequestHandler.cpp
@@ -46,13 +46,13 @@ set(obs-websocket_HEADERS
 	src/forms/settings-dialog.h)
 
 # --- Platform-independent build settings ---
-add_library(obs-websocket MODULE 
+add_library(obs-websocket MODULE
 	${obs-websocket_SOURCES}
 	${obs-websocket_HEADERS})
 
 add_dependencies(obs-websocket mbedcrypto)
 
-include_directories( 
+include_directories(
 	"${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api"
 	${Qt5Core_INCLUDES}
 	${Qt5WebSockets_INCLUDES}
@@ -60,7 +60,7 @@ include_directories(
 	${mbedcrypto_INCLUDES}
 	"${CMAKE_SOURCE_DIR}/deps/mbedtls/include")
 
-target_link_libraries(obs-websocket 
+target_link_libraries(obs-websocket
 	libobs
 	Qt5::Core
 	Qt5::WebSockets
@@ -112,15 +112,15 @@ if(WIN32)
 			"${CMAKE_COMMAND}" -E make_directory
 			"${RELEASE_DIR}/data/obs-plugins/obs-websocket"
 			"${RELEASE_DIR}/obs-plugins/${ARCH_NAME}")
-			
+
 		COMMAND if $<CONFIG:Release>==1 ("${CMAKE_COMMAND}" -E copy_directory
 			"${PROJECT_SOURCE_DIR}/data"
 			"${RELEASE_DIR}/data/obs-plugins/obs-websocket")
 
-		COMMAND if $<CONFIG:Release>==1 ("${CMAKE_COMMAND}" -E copy 
+		COMMAND if $<CONFIG:Release>==1 ("${CMAKE_COMMAND}" -E copy
 			"$<TARGET_FILE:obs-websocket>"
-			"${QTDIR}/bin/Qt5WebSockets.dll" 
-			"${QTDIR}/bin/Qt5Network.dll" 
+			"${QTDIR}/bin/Qt5WebSockets.dll"
+			"${QTDIR}/bin/Qt5Network.dll"
 			"${RELEASE_DIR}/obs-plugins/${ARCH_NAME}")
 
 		# Copy to obs-studio dev environment for immediate testing

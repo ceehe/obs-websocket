@@ -80,10 +80,6 @@ WSEvents::WSEvents(WSServer* srv) {
         this, SLOT(Heartbeat()));
     statusTimer->start(2000); // equal to frontend's constant BITRATE_UPDATE_SECONDS
 
-    QListWidget* sceneList = Utils::GetSceneListControl();
-    connect(sceneList, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-        this, SLOT(SelectedSceneChanged(QListWidgetItem*, QListWidgetItem*)));
-
     currentScene = nullptr;
     currentTransition = nullptr;
 
@@ -185,6 +181,9 @@ void WSEvents::FrontendEventHandler(enum obs_frontend_event event, void* private
     }
     else if (event == OBS_FRONTEND_EVENT_STUDIO_MODE_DISABLED) {
         owner->OnStudioModeSwitched(false);
+    }
+    else if (event == OBS_FRONTEND_EVENT_PREVIEW_SCENE_CHANGED) {
+        owner->OnPreviewSceneChanged();
     }
     else if (event == OBS_FRONTEND_EVENT_EXIT) {
         owner->connectSceneSignals(nullptr);
@@ -303,7 +302,7 @@ const char* WSEvents::GetRecordingTimecode() {
 
  /**
  * Indicates a scene change.
- * 
+ *
  * @return {String} `scene-name` The new scene.
  * @return {Array} `sources` List of sources in the new scene.
  *
@@ -322,19 +321,12 @@ void WSEvents::OnSceneChange() {
     obs_data_set_array(data, "sources", sceneItems);
 
     broadcastUpdate("SwitchScenes", data);
-
-    // Dirty fix : OBS blocks signals when swapping scenes in Studio Mode
-    // after transition end, so SelectedSceneChanged is never called...
-    if (obs_frontend_preview_program_mode_active()) {
-        QListWidget* list = Utils::GetSceneListControl();
-        SelectedSceneChanged(list->currentItem(), nullptr);
-    }
 }
 
 /**
  * The scene list has been modified.
  * Scenes have been added, removed, or renamed.
- * 
+ *
  * @api events
  * @name ScenesChanged
  * @category scenes
@@ -346,7 +338,7 @@ void WSEvents::OnSceneListChange() {
 
 /**
  * Triggered when switching to another scene collection or when renaming the current scene collection.
- * 
+ *
  * @api events
  * @name SceneCollectionChanged
  * @category scenes
@@ -367,7 +359,7 @@ void WSEvents::OnSceneCollectionChange() {
 
 /**
  * Triggered when a scene collection is created, added, renamed, or removed.
- * 
+ *
  * @api events
  * @name SceneCollectionListChanged
  * @category scenes
@@ -468,7 +460,7 @@ void WSEvents::OnStreamStarted() {
 
 /**
  * A request to stop streaming has been issued.
- * 
+ *
  * @return {boolean} `preview-only` Always false (retrocompatibility).
  *
  * @api events
@@ -678,7 +670,7 @@ void WSEvents::StreamStatus() {
 
 /**
  * Emitted every 2 seconds after enabling it by calling SetHeartbeat.
- * 
+ *
  * @return {boolean} `pulse` Toggles between every JSON meassage as an "I am alive" indicator.
  * @return {string (optional)} `current-profile` Current active profile.
  * @return {string (optional)} `current-scene` Current active scene.
@@ -690,7 +682,7 @@ void WSEvents::StreamStatus() {
  * @return {int (optional)} `total-record-time` Total time (in seconds) since recording started.
  * @return {int (optional)} `total-record-bytes` Total bytes recorded since the recording started.
  * @return {int (optional)} `total-record-frames` Total frames recorded since the recording started.
- * 
+ *
  * @api events
  * @name Heartbeat
  * @category general
@@ -909,17 +901,16 @@ void WSEvents::OnSceneItemVisibilityChanged(void* param, calldata_t* data) {
  * @category studio mode
  * @since 4.1.0
  */
-void WSEvents::SelectedSceneChanged(QListWidgetItem* current, QListWidgetItem* prev) {
+void WSEvents::OnPreviewSceneChanged() {
     if (obs_frontend_preview_program_mode_active()) {
-        OBSScene scene = Utils::SceneListItemToScene(current);
+        OBSSourceAutoRelease scene = obs_frontend_get_current_preview_scene();
         if (!scene)
             return;
 
-        OBSSource sceneSource = obs_scene_get_source(scene);
-        OBSDataArrayAutoRelease sceneItems = Utils::GetSceneItems(sceneSource);
+        OBSDataArrayAutoRelease sceneItems = Utils::GetSceneItems(scene);
 
         OBSDataAutoRelease data = obs_data_create();
-        obs_data_set_string(data, "scene-name", obs_source_get_name(sceneSource));
+        obs_data_set_string(data, "scene-name", obs_source_get_name(scene));
         obs_data_set_array(data, "sources", sceneItems);
 
         broadcastUpdate("PreviewSceneChanged", data);
