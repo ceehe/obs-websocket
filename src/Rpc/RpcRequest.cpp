@@ -1,16 +1,16 @@
 #include "RpcRequest.h"
 
 RpcRequest::RpcRequest(const QString &id, const QString &methodName,
-    QHash<QString, QVariant> params)
+    QVariantHash params)
         : id(id),
           methodName(methodName),
           parameters(params)
 {
 }
 
-QHash<QString, QVariant> RpcRequest::immutableParams()
+QVariantHash RpcRequest::immutableParams()
 {
-    return QHash<QString, QVariant>(parameters);
+    return QVariantHash(parameters);
 }
 
 QString RpcRequest::getId()
