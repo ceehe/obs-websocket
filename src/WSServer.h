@@ -22,8 +22,10 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <QObject>
 #include <QList>
 #include <QMutex>
+#include <QWebSocketServer>
 
-#include "WSRequestHandler.h"
+#include "Rpc\RpcHandler.h"
+#include "JsonRpc.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
 QT_FORWARD_DECLARE_CLASS(QWebSocket)
@@ -47,6 +49,9 @@ class WSServer : public QObject {
     QWebSocketServer* _wsServer;
     QList<QWebSocket*> _clients;
     QMutex _clMutex;
+
+    RpcHandler _rpcHandler;
+    JsonRpc _jsonRpc;
 };
 
 #endif // WSSERVER_H

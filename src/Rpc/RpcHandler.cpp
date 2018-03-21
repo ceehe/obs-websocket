@@ -1,0 +1,31 @@
+#include "RpcHandler.h"
+
+RpcHandler::RpcHandler()
+{
+
+}
+
+RpcHandler::~RpcHandler()
+{
+
+}
+
+RpcResponse RpcHandler::processCall(RpcRequest request)
+{
+	QString methodName = request.getMethodName();
+
+	// Try to resolve the method from the built-in ones
+	RpcMethod* method = this->builtinMethodHandlers.value(methodName, nullptr);
+	if (method) {
+		return method->handle(request);
+	} else {
+		// Otherwise let's try from the 3rd party ones
+		RpcMethod* thirdPartyMethod =
+			this->thirdPartyMethodHandlers.value(methodName, nullptr);
+		if (thirdPartyMethod) {
+			return thirdPartyMethod->handle(request);
+		}
+	}
+
+	return RpcResponse::fail(request, "Unknown method");
+}
