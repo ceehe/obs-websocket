@@ -37,7 +37,7 @@ WSServer::WSServer(QObject* parent)
       _wsServer(Q_NULLPTR),
       _clients(),
       _clMutex(QMutex::Recursive),
-      _jsonRpc(&_rpcHandler)
+      _jsonRpc(_rpcHandler)
 {
     _wsServer = new QWebSocketServer(
         QStringLiteral("obs-websocket"),

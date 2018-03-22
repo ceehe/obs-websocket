@@ -3,7 +3,7 @@
 #include <QByteArray>
 #include <QJsonObject>
 
-JsonRpc::JsonRpc(RpcHandler* handler)
+JsonRpc::JsonRpc(RpcHandler& handler)
 	: rpcHandler(handler)
 {
 }
@@ -29,7 +29,7 @@ void JsonRpc::handleTextMessage(QWebSocket* client, QString& messageBody)
 	}
 
 	const RpcRequest request = jsonToRequest(requestJson);
-	const RpcResponse response = rpcHandler->processCall(request);
+	const RpcResponse response = rpcHandler.processCall(request);
 	sendToClient(client, responseToJson(response));
 }
 

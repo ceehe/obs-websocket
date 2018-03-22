@@ -10,7 +10,7 @@
 
 class JsonRpc {
 public:
-	JsonRpc(RpcHandler* handler);
+	JsonRpc(RpcHandler& handler);
 	void handleTextMessage(QWebSocket* client, QString& messageBody);
 private:
 	static const RpcRequest jsonToRequest(const QJsonDocument& requestBody);
@@ -21,5 +21,5 @@ private:
     static QJsonDocument anonymousError(const RpcError& error);
 	static void sendToClient(QWebSocket* client, const QJsonDocument& document);
 
-	RpcHandler* rpcHandler;
+	RpcHandler& rpcHandler;
 };
