@@ -4,9 +4,9 @@
 #include <QWebSocket>
 #include <QString>
 
-#include "Rpc\RpcResponse.h"
-#include "Rpc\RpcRequest.h"
-#include "Rpc\RpcHandler.h"
+#include "Rpc/RpcResponse.h"
+#include "Rpc/RpcRequest.h"
+#include "Rpc/RpcHandler.h"
 
 class JsonRpc {
 public:
