@@ -1,8 +1,10 @@
 #include "RpcHandler.h"
 
+#include "../Methods/RpcMethods.h"
+
 RpcHandler::RpcHandler()
 {
-
+	this->builtinMethodHandlers.insert("GetVersion", new GetVersion());
 }
 
 RpcHandler::~RpcHandler()
