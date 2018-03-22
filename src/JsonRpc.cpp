@@ -26,11 +26,11 @@ void JsonRpc::handleTextMessage(QWebSocket* client, QString& messageBody)
 	}
 
 	const RpcRequest request = jsonToRequest(requestJson);
-	RpcResponse response = rpcHandler->processCall(request);
+	const RpcResponse response = rpcHandler->processCall(request);
 	sendToClient(client, responseToJson(response));
 }
 
-RpcRequest JsonRpc::jsonToRequest(const QJsonDocument& requestBody)
+const RpcRequest JsonRpc::jsonToRequest(const QJsonDocument& requestBody)
 {
 	QJsonObject obj = requestBody.object();
 
@@ -47,7 +47,7 @@ RpcRequest JsonRpc::jsonToRequest(const QJsonDocument& requestBody)
 	return RpcRequest(id, method, parameters);
 }
 
-QJsonDocument JsonRpc::responseToJson(RpcResponse& response)
+QJsonDocument JsonRpc::responseToJson(const RpcResponse& response)
 {
 	QJsonObject obj;
 	obj.insert("jsonrpc", "2.0");

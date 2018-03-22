@@ -28,22 +28,22 @@ const RpcResponse RpcResponse::fail(const RpcRequest& request, const QString& er
     return response;
 }
 
-const QString& RpcResponse::getId()
+const QString& RpcResponse::getId() const
 {
     return id;
 }
 
-const QString& RpcResponse::getMethodName()
+const QString& RpcResponse::getMethodName() const
 {
     return methodName;
 }
 
-const QVariant& RpcResponse::getResult()
+const QVariant& RpcResponse::getResult() const
 {
     return result;
 }
 
-const QString& RpcResponse::getError()
+const QString& RpcResponse::getError() const
 {
     return error;
 }

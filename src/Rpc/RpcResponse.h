@@ -13,10 +13,10 @@ class RpcResponse {
 
     RpcResponse(const QString& id, const QString& methodName);
 
-    const QString& getId();
-    const QString& getMethodName();
-    const QVariant& getResult();
-    const QString& getError();
+    const QString& getId() const;
+    const QString& getMethodName() const;
+    const QVariant& getResult() const;
+    const QString& getError() const;
   private:
     QString id;
     QString error;

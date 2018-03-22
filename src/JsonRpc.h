@@ -13,8 +13,8 @@ public:
 	JsonRpc(RpcHandler* handler);
 	void handleTextMessage(QWebSocket* client, QString& messageBody);
 private:
-	static RpcRequest jsonToRequest(const QJsonDocument& requestBody);
-	static QJsonDocument responseToJson(RpcResponse& response);
+	static const RpcRequest jsonToRequest(const QJsonDocument& requestBody);
+	static QJsonDocument responseToJson(const RpcResponse& response);
 
 	static bool requestDocumentIsValid(const QJsonDocument& request);
 	static QJsonDocument anonymousError(const QString& error);
