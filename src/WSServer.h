@@ -24,7 +24,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <QMutex>
 #include <QWebSocketServer>
 
-#include "Rpc\RpcHandler.h"
+#include "Rpc/RpcHandler.h"
 #include "JsonRpc.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
