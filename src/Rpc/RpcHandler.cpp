@@ -1,6 +1,6 @@
 #include "RpcHandler.h"
 
-#include "../Methods/RpcMethods.h"
+#include "Methods/RpcMethods.h"
 
 RpcHandler::RpcHandler()
 {

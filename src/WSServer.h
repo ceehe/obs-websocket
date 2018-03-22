@@ -25,7 +25,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <QWebSocketServer>
 
 #include "Rpc/RpcHandler.h"
-#include "JsonRpc.h"
+#include "src/Rpc/JsonRpc.h"
 
 QT_FORWARD_DECLARE_CLASS(QWebSocketServer)
 QT_FORWARD_DECLARE_CLASS(QWebSocket)

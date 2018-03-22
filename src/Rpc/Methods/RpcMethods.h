@@ -2,9 +2,9 @@
 
 #include <QJsonArray>
 
-#include "../Rpc/RpcMethod.h"
-#include "../Utils.h"
-#include "../obs-websocket.h"
+#include "src/Rpc/RpcMethod.h"
+#include "src/Utils.h"
+#include "src/obs-websocket.h"
 
 class GetVersion : public RpcMethod {
   public:
