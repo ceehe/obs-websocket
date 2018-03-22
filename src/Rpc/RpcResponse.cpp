@@ -7,12 +7,12 @@ RpcResponse::RpcResponse(const QString& id, const QString& methodName)
 {
 }
 
-RpcResponse RpcResponse::ofRequest(RpcRequest& request)
+RpcResponse RpcResponse::ofRequest(const RpcRequest& request)
 {
     return RpcResponse(request.getId(), request.getMethodName());
 }
 
-RpcResponse RpcResponse::ok(RpcRequest& request, const QVariant& result)
+const RpcResponse RpcResponse::ok(const RpcRequest& request, const QVariant& result)
 {
     RpcResponse response = ofRequest(request);
     response.result = result;
@@ -20,7 +20,7 @@ RpcResponse RpcResponse::ok(RpcRequest& request, const QVariant& result)
     return response;
 }
 
-RpcResponse RpcResponse::fail(RpcRequest& request, const QString& error)
+const RpcResponse RpcResponse::fail(const RpcRequest& request, const QString& error)
 {
     RpcResponse response = ofRequest(request);
     response.result = QVariant();

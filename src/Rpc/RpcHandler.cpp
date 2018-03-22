@@ -11,7 +11,7 @@ RpcHandler::~RpcHandler()
 {
 }
 
-RpcResponse RpcHandler::processCall(RpcRequest& request)
+RpcResponse RpcHandler::processCall(const RpcRequest& request)
 {
 	QString methodName = request.getMethodName();
 

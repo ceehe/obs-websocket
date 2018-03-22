@@ -13,12 +13,12 @@ QVariantHash RpcRequest::immutableParams()
     return QVariantHash(parameters);
 }
 
-const QString& RpcRequest::getId()
+const QString& RpcRequest::getId() const
 {
     return this->id;
 }
 
-const QString& RpcRequest::getMethodName()
+const QString& RpcRequest::getMethodName() const
 {
     return this->methodName;
 }

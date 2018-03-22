@@ -8,7 +8,7 @@
 
 class GetVersion : public RpcMethod {
   public:
-	  RpcResponse handle(RpcRequest& request) override
+	  RpcResponse handle(const RpcRequest& request) override
 	  {
 		  QString obsVersion = Utils::OBSVersionString();
 

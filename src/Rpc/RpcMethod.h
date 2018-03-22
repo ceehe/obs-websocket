@@ -5,5 +5,5 @@
 
 class RpcMethod {
   public:
-    virtual RpcResponse handle(RpcRequest& request) = 0;
+    virtual RpcResponse handle(const RpcRequest& request) = 0;
 };

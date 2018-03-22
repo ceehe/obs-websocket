@@ -7,9 +7,9 @@
 
 class RpcResponse {
   public:
-    static RpcResponse ofRequest(RpcRequest& request);
-    static RpcResponse ok(RpcRequest& request, const QVariant& result = QVariant());
-    static RpcResponse fail(RpcRequest& request, const QString& error);
+    static RpcResponse ofRequest(const RpcRequest& request);
+    static const RpcResponse ok(const RpcRequest& request, const QVariant& result = QVariant());
+    static const RpcResponse fail(const RpcRequest& request, const QString& error);
 
     RpcResponse(const QString& id, const QString& methodName);
 

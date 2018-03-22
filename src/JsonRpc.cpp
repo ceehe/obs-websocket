@@ -25,7 +25,7 @@ void JsonRpc::handleTextMessage(QWebSocket* client, QString& messageBody)
 		return;
 	}
 
-	RpcRequest request = jsonToRequest(requestJson);
+	const RpcRequest request = jsonToRequest(requestJson);
 	RpcResponse response = rpcHandler->processCall(request);
 	sendToClient(client, responseToJson(response));
 }

@@ -11,7 +11,7 @@ class RpcHandler : public QObject {
   public:
     RpcHandler();
     ~RpcHandler();
-    RpcResponse processCall(RpcRequest& request);
+    RpcResponse processCall(const RpcRequest& request);
   private:
     QHash<QString, RpcMethod*> builtinMethodHandlers;
     QHash<QString, RpcMethod*> thirdPartyMethodHandlers;
