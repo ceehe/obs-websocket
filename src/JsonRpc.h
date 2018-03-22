@@ -17,7 +17,8 @@ private:
 	static QJsonDocument responseToJson(const RpcResponse& response);
 
 	static bool requestDocumentIsValid(const QJsonDocument& request);
-	static QJsonDocument anonymousError(const QString& error);
+	static QJsonObject errorToJson(const RpcError& error);
+    static QJsonDocument anonymousError(const RpcError& error);
 	static void sendToClient(QWebSocket* client, const QJsonDocument& document);
 
 	RpcHandler* rpcHandler;

@@ -16,15 +16,17 @@ const RpcResponse RpcResponse::ok(const RpcRequest& request, const QVariant& res
 {
     RpcResponse response = ofRequest(request);
     response.result = result;
-    response.error = QString::Null();
+    response.error = RpcError();
     return response;
 }
 
-const RpcResponse RpcResponse::fail(const RpcRequest& request, const QString& error)
+const RpcResponse RpcResponse::fail(const RpcRequest& request,
+                                    const QString& errorMessage,
+                                    int errorCode)
 {
     RpcResponse response = ofRequest(request);
     response.result = QVariant();
-    response.error = error;
+    response.error = RpcError(errorMessage, errorCode);
     return response;
 }
 
@@ -43,7 +45,7 @@ const QVariant& RpcResponse::getResult() const
     return result;
 }
 
-const QString& RpcResponse::getError() const
+const RpcError& RpcResponse::getError() const
 {
     return error;
 }

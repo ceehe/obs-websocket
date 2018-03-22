@@ -28,5 +28,6 @@ const RpcResponse RpcHandler::processCall(const RpcRequest& request)
 		}
 	}
 
-	return RpcResponse::fail(request, "Unknown method");
+	return RpcResponse::fail(request, "Method not found",
+							 RpcErrorCode::MethodNotFound);
 }
