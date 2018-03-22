@@ -1,18 +1,18 @@
 #include "RpcResponse.h"
 
-RpcResponse::RpcResponse(QString id, QString methodName)
+RpcResponse::RpcResponse(const QString& id, const QString& methodName)
     : id(id),
       methodName(methodName),
       error(QString::Null())
 {
 }
 
-RpcResponse RpcResponse::ofRequest(RpcRequest request)
+RpcResponse RpcResponse::ofRequest(RpcRequest& request)
 {
     return RpcResponse(request.getId(), request.getMethodName());
 }
 
-RpcResponse RpcResponse::ok(RpcRequest request, QVariant result)
+RpcResponse RpcResponse::ok(RpcRequest& request, const QVariant& result)
 {
     RpcResponse response = ofRequest(request);
     response.result = result;
@@ -20,7 +20,7 @@ RpcResponse RpcResponse::ok(RpcRequest request, QVariant result)
     return response;
 }
 
-RpcResponse RpcResponse::fail(RpcRequest request, QString error)
+RpcResponse RpcResponse::fail(RpcRequest& request, const QString& error)
 {
     RpcResponse response = ofRequest(request);
     response.result = QVariant();

@@ -7,11 +7,11 @@
 
 class RpcResponse {
   public:
-    static RpcResponse ofRequest(RpcRequest request);
-    static RpcResponse ok(RpcRequest request, QVariant result = QVariant());
-    static RpcResponse fail(RpcRequest request, QString error);
+    static RpcResponse ofRequest(RpcRequest& request);
+    static RpcResponse ok(RpcRequest& request, const QVariant& result = QVariant());
+    static RpcResponse fail(RpcRequest& request, const QString& error);
 
-    RpcResponse(QString id, QString methodName);
+    RpcResponse(const QString& id, const QString& methodName);
 
     const QString& getId();
     const QString& getMethodName();

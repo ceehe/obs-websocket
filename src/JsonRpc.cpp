@@ -8,7 +8,7 @@ JsonRpc::JsonRpc(RpcHandler* handler)
 {
 }
 
-void JsonRpc::handleTextMessage(QWebSocket* client, QString messageBody)
+void JsonRpc::handleTextMessage(QWebSocket* client, QString& messageBody)
 {
 	QJsonParseError parseError;
 	QJsonDocument requestJson =
@@ -30,7 +30,7 @@ void JsonRpc::handleTextMessage(QWebSocket* client, QString messageBody)
 	sendToClient(client, responseToJson(response));
 }
 
-RpcRequest JsonRpc::jsonToRequest(QJsonDocument requestBody)
+RpcRequest JsonRpc::jsonToRequest(const QJsonDocument& requestBody)
 {
 	QJsonObject obj = requestBody.object();
 
@@ -47,7 +47,7 @@ RpcRequest JsonRpc::jsonToRequest(QJsonDocument requestBody)
 	return RpcRequest(id, method, parameters);
 }
 
-QJsonDocument JsonRpc::responseToJson(RpcResponse response)
+QJsonDocument JsonRpc::responseToJson(RpcResponse& response)
 {
 	QJsonObject obj;
 	obj.insert("jsonrpc", "2.0");
@@ -64,7 +64,7 @@ QJsonDocument JsonRpc::responseToJson(RpcResponse response)
 	return QJsonDocument(obj);
 }
 
-bool JsonRpc::requestDocumentIsValid(QJsonDocument request)
+bool JsonRpc::requestDocumentIsValid(const QJsonDocument& request)
 {
 	if (!request.isObject()) return false;
 	QJsonObject obj = request.object();
@@ -88,7 +88,7 @@ bool JsonRpc::requestDocumentIsValid(QJsonDocument request)
 	return true;
 }
 
-QJsonDocument JsonRpc::anonymousError(QString error)
+QJsonDocument JsonRpc::anonymousError(const QString& error)
 {
 	QJsonObject obj;
 	obj.insert("jsonrpc", "2.0");
@@ -96,7 +96,7 @@ QJsonDocument JsonRpc::anonymousError(QString error)
 	return QJsonDocument(obj);
 }
 
-void JsonRpc::sendToClient(QWebSocket* client, QJsonDocument document)
+void JsonRpc::sendToClient(QWebSocket* client, const QJsonDocument& document)
 {
 	if (!client)
 		return;

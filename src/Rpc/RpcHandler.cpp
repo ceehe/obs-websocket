@@ -9,10 +9,9 @@ RpcHandler::RpcHandler()
 
 RpcHandler::~RpcHandler()
 {
-
 }
 
-RpcResponse RpcHandler::processCall(RpcRequest request)
+RpcResponse RpcHandler::processCall(RpcRequest& request)
 {
 	QString methodName = request.getMethodName();
 
