@@ -71,11 +71,9 @@ bool JsonRpc::requestDocumentIsValid(QJsonDocument request)
 
 	QJsonValue jsonrpc = obj.value("jsonrpc"),
 		method = obj.value("method"),
-		params = obj.value("params"),
 		id = obj.value("id");
 
-	if (jsonrpc.isUndefined() || method.isUndefined() ||
-		params.isUndefined() || id.isUndefined())
+	if (jsonrpc.isUndefined() || method.isUndefined() || id.isUndefined())
 	{
 		return false;
 	}
