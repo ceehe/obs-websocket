@@ -56,7 +56,10 @@ QJsonDocument JsonRpc::responseToJson(const RpcResponse& response)
 	QVariant result = response.getResult();
 	QString error = response.getError();
 	if (!error.isNull()) {
-		obj.insert("error", error);
+		QJsonObject errorObj;
+		errorObj.insert("code", -32603);
+		errorObj.insert("message", error);
+		obj.insert("error", errorObj);
 	} else {
 		obj.insert("result", QJsonValue::fromVariant(result));
 	}
