@@ -43,7 +43,8 @@ set(obs-websocket_SOURCES
 	src/Rpc/RpcResponse.cpp
 		src/Rpc/JsonRpc.cpp
 		src/Rpc/RpcError.cpp
-		src/Clients/RemoteClientInfo.cpp)
+		src/Clients/RemoteClientInfo.cpp
+		src/Rpc/Methods/GetVersion.cpp)
 
 set(obs-websocket_HEADERS
 	src/obs-websocket.h
