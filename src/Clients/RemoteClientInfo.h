@@ -2,15 +2,16 @@
 
 #include <QtCore/QString>
 #include <QtCore/QHash>
+#include <QtNetwork/QHostAddress>
 
-class ClientConnectionInfo
+class RemoteClientInfo
 {
     public:
-        ClientConnectionInfo(const QString& ipAddress,
+        RemoteClientInfo(const QHostAddress& remoteAddr,
                              const QHash<QString, QString>& headers);
-        const QString& getIpAddress() const;
+        const QHostAddress& getRemoteAddr() const;
         const QHash<QString, QString> getHeaders() const;
     private:
-        QString ipAddress;
+        QHostAddress remoteAddr;
         QHash<QString, QString> headers;
 };

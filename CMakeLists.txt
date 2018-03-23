@@ -43,10 +43,7 @@ set(obs-websocket_SOURCES
 	src/Rpc/RpcResponse.cpp
 		src/Rpc/JsonRpc.cpp
 		src/Rpc/RpcError.cpp
-		src/Events/EventDispatcher.cpp
-		src/Clients/ClientConnection.cpp
-		src/Clients/ClientConnectionInfo.cpp
-		src/Clients/ClientConnectionInfo.h)
+		src/Clients/RemoteClientInfo.cpp)
 
 set(obs-websocket_HEADERS
 	src/obs-websocket.h
@@ -63,9 +60,8 @@ set(obs-websocket_HEADERS
 		src/Rpc/JsonRpc.h
 		src/Rpc/Methods/RpcMethods.h
 		src/Rpc/RpcError.h
-		src/Events/EventDispatcher.h
 		src/Clients/ClientConnection.h
-		src/Clients/ClientConnectionInfo.h)
+		src/Clients/RemoteClientInfo.h)
 
 # --- Platform-independent build settings ---
 add_library(obs-websocket MODULE
