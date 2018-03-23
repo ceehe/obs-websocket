@@ -2,9 +2,11 @@
 
 #include "Methods/RpcMethods.h"
 
+#define ADD_HANDLER(x) insert(#x, new x())
+
 RpcHandler::RpcHandler()
 {
-	this->builtinMethodHandlers.insert("GetVersion", new GetVersion());
+	this->builtinMethodHandlers.ADD_HANDLER(GetVersion);
 }
 
 RpcHandler::~RpcHandler()
