@@ -60,7 +60,7 @@ set(obs-websocket_HEADERS
 		src/Rpc/JsonRpc.h
 		src/Rpc/Methods/RpcMethods.h
 		src/Rpc/RpcError.h
-		src/Clients/ClientConnection.h
+		src/Clients/RemoteClient.h
 		src/Clients/RemoteClientInfo.h)
 
 # --- Platform-independent build settings ---

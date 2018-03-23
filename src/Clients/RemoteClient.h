@@ -3,7 +3,7 @@
 #include <QtCore/QString>
 #include "RemoteClientInfo.h"
 
-class ClientConnection
+class RemoteClient
 {
     public:
         virtual void sendTextMessage(QString& message) = 0;
