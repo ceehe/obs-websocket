@@ -84,6 +84,7 @@ QHash<QString, void(*)(WSRequestHandler*)> WSRequestHandler::messageMap {
     { "GetSourceTypesList", WSRequestHandler::HandleGetSourceTypesList },
     { "GetSourceSettings", WSRequestHandler::HandleGetSourceSettings },
     { "SetSourceSettings", WSRequestHandler::HandleSetSourceSettings },
+	{ "GetSourceImage", WSRequestHandler::HandleGetSourceImage },
 
     { "SetCurrentSceneCollection", WSRequestHandler::HandleSetCurrentSceneCollection },
     { "GetCurrentSceneCollection", WSRequestHandler::HandleGetCurrentSceneCollection },

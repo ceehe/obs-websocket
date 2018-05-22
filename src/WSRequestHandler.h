@@ -109,6 +109,7 @@ class WSRequestHandler : public QObject {
     static void HandleGetSourceTypesList(WSRequestHandler* req);
     static void HandleGetSourceSettings(WSRequestHandler* req);
     static void HandleSetSourceSettings(WSRequestHandler* req);
+	static void HandleGetSourceImage(WSRequestHandler* req);
 
     static void HandleSetCurrentSceneCollection(WSRequestHandler* req);
     static void HandleGetCurrentSceneCollection(WSRequestHandler* req);
