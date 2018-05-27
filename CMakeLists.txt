@@ -6,7 +6,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
+if (WIN32 OR APPLE)
 include(external/FindLibObs.cmake)
+endif()
 
 find_package(LibObs REQUIRED)
 find_package(Qt5Core REQUIRED)
@@ -97,6 +99,11 @@ if(WIN32)
 			"${QTDIR}/bin/Qt5Network.dll"
 			"${CMAKE_BINARY_DIR}/$<CONFIG>")
 
+		COMMAND if $<CONFIG:RelWithDebInfo>==1 ("${CMAKE_COMMAND}" -E copy
+			"${QTDIR}/bin/Qt5WebSockets.dll"
+			"${QTDIR}/bin/Qt5Network.dll"
+			"${CMAKE_BINARY_DIR}/$<CONFIG>")
+
 		COMMAND if $<CONFIG:Debug>==1 ("${CMAKE_COMMAND}" -E copy
 			"${QTDIR}/bin/Qt5WebSocketsd.dll"
 			"${QTDIR}/bin/Qt5Networkd.dll"
@@ -108,6 +115,7 @@ if(WIN32)
 	set(RELEASE_DIR "${PROJECT_SOURCE_DIR}/release")
 
 	add_custom_command(TARGET obs-websocket POST_BUILD
+		# If config is Release, package release files
 		COMMAND if $<CONFIG:Release>==1 (
 			"${CMAKE_COMMAND}" -E make_directory
 			"${RELEASE_DIR}/data/obs-plugins/obs-websocket"
@@ -123,12 +131,37 @@ if(WIN32)
 			"${QTDIR}/bin/Qt5Network.dll"
 			"${RELEASE_DIR}/obs-plugins/${ARCH_NAME}")
 
+		# If config is RelWithDebInfo, package release files
+		COMMAND if $<CONFIG:RelWithDebInfo>==1 (
+			"${CMAKE_COMMAND}" -E make_directory
+			"${RELEASE_DIR}/data/obs-plugins/obs-websocket"
+			"${RELEASE_DIR}/obs-plugins/${ARCH_NAME}")
+
+		COMMAND if $<CONFIG:RelWithDebInfo>==1 ("${CMAKE_COMMAND}" -E copy_directory
+			"${PROJECT_SOURCE_DIR}/data"
+			"${RELEASE_DIR}/data/obs-plugins/obs-websocket")
+
+		COMMAND if $<CONFIG:RelWithDebInfo>==1 ("${CMAKE_COMMAND}" -E copy
+			"$<TARGET_FILE:obs-websocket>"
+			"${QTDIR}/bin/Qt5WebSockets.dll"
+			"${QTDIR}/bin/Qt5Network.dll"
+			"${RELEASE_DIR}/obs-plugins/${ARCH_NAME}")
+
+		COMMAND if $<CONFIG:RelWithDebInfo>==1 ("${CMAKE_COMMAND}" -E copy
+			"$<TARGET_PDB_FILE:obs-websocket>"
+			"${RELEASE_DIR}/obs-plugins/${ARCH_NAME}")
+
 		# Copy to obs-studio dev environment for immediate testing
 		COMMAND if $<CONFIG:Debug>==1 (
 			"${CMAKE_COMMAND}" -E copy
 				"$<TARGET_FILE:obs-websocket>"
 				"${QTDIR}/bin/Qt5WebSocketsd.dll"
 				"${QTDIR}/bin/Qt5Networkd.dll"
+				"${LIBOBS_INCLUDE_DIR}/../${OBS_BUILDDIR_ARCH}/rundir/$<CONFIG>/obs-plugins/${ARCH_NAME}")
+
+		COMMAND if $<CONFIG:Debug>==1 (
+			"${CMAKE_COMMAND}" -E copy
+				"$<TARGET_PDB_FILE:obs-websocket>"
 				"${LIBOBS_INCLUDE_DIR}/../${OBS_BUILDDIR_ARCH}/rundir/$<CONFIG>/obs-plugins/${ARCH_NAME}")
 
 		COMMAND if $<CONFIG:Debug>==1 (
@@ -167,6 +200,7 @@ endif()
 if(APPLE)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -fvisibility=default")
 
+	set(CMAKE_SKIP_RPATH TRUE)
 	set_target_properties(obs-websocket PROPERTIES PREFIX "")
 	target_link_libraries(obs-websocket "${OBS_FRONTEND_LIB}")
 endif()

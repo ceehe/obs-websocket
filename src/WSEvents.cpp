@@ -563,7 +563,7 @@ void WSEvents::OnReplayStarted() {
 }
 
 /**
-* A request to start the replay buffer has been issued.
+* A request to stop the replay buffer has been issued.
 *
 * @api events
 * @name ReplayStopping
