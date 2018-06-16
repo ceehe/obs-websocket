@@ -104,7 +104,7 @@ WSEvents::~WSEvents() {
 
 void WSEvents::deferredInitOperations() {
     OBSSourceAutoRelease transition = obs_frontend_get_current_transition();
-    connectTransitionSignals(transition);
+	hookTransitionBeginEvent();
 
     OBSSourceAutoRelease scene = obs_frontend_get_current_scene();
     connectSceneSignals(scene);
@@ -132,6 +132,7 @@ void WSEvents::FrontendEventHandler(enum obs_frontend_event event, void* private
         owner->OnTransitionChange();
     }
     else if (event == OBS_FRONTEND_EVENT_TRANSITION_LIST_CHANGED) {
+		owner->hookTransitionBeginEvent();
         owner->OnTransitionListChange();
     }
     else if (event == OBS_FRONTEND_EVENT_PROFILE_CHANGED) {
@@ -188,7 +189,6 @@ void WSEvents::FrontendEventHandler(enum obs_frontend_event event, void* private
     }
     else if (event == OBS_FRONTEND_EVENT_EXIT) {
         owner->connectSceneSignals(nullptr);
-        owner->connectTransitionSignals(nullptr);
         owner->OnExit();
     }
 }
@@ -222,29 +222,18 @@ void WSEvents::broadcastUpdate(const char* updateType,
         blog(LOG_DEBUG, "Update << '%s'", json.toUtf8().constData());
 }
 
-void WSEvents::connectTransitionSignals(obs_source_t* transition) {
-    signal_handler_t* sh = nullptr;
+void WSEvents::hookTransitionBeginEvent() {
+	obs_frontend_source_list transitions = {};
+	obs_frontend_get_transitions(&transitions);
 
-    if (currentTransition) {
-        sh = obs_source_get_signal_handler(currentTransition);
-        signal_handler_disconnect(sh,
-            "transition_start", OnTransitionBegin, this);
-    }
+	for (int i = 0; i < transitions.sources.num; i++) {
+		obs_source_t* transition = transitions.sources.array[i];
+		signal_handler_t* sh = obs_source_get_signal_handler(transition);
+		signal_handler_disconnect(sh, "transition_start", OnTransitionBegin, this);
+		signal_handler_connect(sh, "transition_start", OnTransitionBegin, this);
+	}
 
-    currentTransition = transition;
-
-    if (currentTransition) {
-        if (!transitionIsCut(transition)) {
-            currentTransition = transition;
-
-            sh = obs_source_get_signal_handler(currentTransition);
-            signal_handler_connect(sh,
-                "transition_start", OnTransitionBegin, this);
-        }
-        else {
-            currentTransition = nullptr;
-        }
-    }
+	obs_frontend_source_list_free(&transitions);
 }
 
 void WSEvents::connectSceneSignals(obs_source_t* scene) {
@@ -389,7 +378,6 @@ void WSEvents::OnSceneCollectionListChange() {
  */
 void WSEvents::OnTransitionChange() {
     OBSSourceAutoRelease currentTransition = obs_frontend_get_current_transition();
-    connectTransitionSignals(currentTransition);
 
     OBSDataAutoRelease data = obs_data_create();
     obs_data_set_string(data, "transition-name",
