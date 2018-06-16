@@ -85,7 +85,6 @@ WSEvents::WSEvents(WSServer* srv) {
         this, SLOT(SelectedSceneChanged(QListWidgetItem*, QListWidgetItem*)));
 
     currentScene = nullptr;
-    currentTransition = nullptr;
 
     QTimer::singleShot(1000, this, SLOT(deferredInitOperations()));
 
@@ -345,7 +344,6 @@ void WSEvents::OnSceneCollectionChange() {
     broadcastUpdate("SceneCollectionChanged");
 
     currentScene = nullptr;
-    currentTransition = nullptr;
 
     OnTransitionListChange();
     OnTransitionChange();
@@ -750,14 +748,31 @@ void WSEvents::TransitionDurationChanged(int ms) {
  * @since 4.0.0
  */
 void WSEvents::OnTransitionBegin(void* param, calldata_t* data) {
-    UNUSED_PARAMETER(data);
     WSEvents* instance = static_cast<WSEvents*>(param);
 
-    OBSSourceAutoRelease currentTransition = obs_frontend_get_current_transition();
+	OBSSource transition = (obs_source_t*)calldata_get_ptr(data, "source");
+	if (!transition) return;
+
+	// Detect if transition is the global transition or a transition override.
+	// Fetching the duration is different depending on the case.
+	OBSSourceAutoRelease destination = obs_transition_get_active_source(transition);
+	OBSDataAutoRelease destinationSettings = obs_source_get_private_settings(destination);
+	int duration = -1;
+	if (obs_data_has_default_value(destinationSettings, "transition_duration") ||
+		obs_data_has_user_value(destinationSettings, "transition_duration"))
+	{
+		duration = obs_data_get_int(destinationSettings, "transition_duration");
+	} else {
+		duration = Utils::GetTransitionDuration();
+	}
 
     OBSDataAutoRelease fields = obs_data_create();
-    obs_data_set_string(fields, "name", obs_source_get_name(currentTransition));
-    obs_data_set_int(fields, "duration", Utils::GetTransitionDuration());
+    obs_data_set_string(fields, "name", obs_source_get_name(transition));
+	if (duration >= 0) {
+		obs_data_set_int(fields, "duration", duration);
+	} else {
+		blog(LOG_WARNING, "OnTransitionBegin: duration is negative !");
+	}
 
     instance->broadcastUpdate("TransitionBegin", fields);
 }

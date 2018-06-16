@@ -55,7 +55,6 @@ class WSEvents : public QObject {
   private:
     WSServer* _srv;
     OBSSource currentScene;
-    OBSSource currentTransition;
 
     bool pulse;
 
